@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: awx
+  namespace: cloudplatform-team-argocd-prod
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - list:
+      elements:
+      - env: prod
+        revision: master
+      - env: nonprod
+        revision: master
+  template:
+    metadata:
+      name: 'awx-{{.env}}'
+    spec:
+      project: 'lht-automationplatform-{{.env}}'
+      source:
+        repoURL: https://github.com/lht-general/cloudplatform-team-awx-gitops
+        targetRevision: '{{.revision}}'
+        path: manifest/{{.env}}
+        plugin:
+          name: argocd-vault-plugin
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: lht-awx-{{.env}} 
