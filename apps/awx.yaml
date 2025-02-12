@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: awx
-  namespace: cloudplatform-team-argocd-prod
+  namespace: argocd
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
@@ -19,11 +19,9 @@ spec:
     spec:
       project: 'lht-automationplatform-{{.env}}'
       source:
-        repoURL: https://github.com/lht-general/cloudplatform-team-awx-gitops
+        repoURL: https://github.com/niki-playground/test_awx_repo.git
         targetRevision: '{{.revision}}'
         path: manifest/{{.env}}
-        plugin:
-          name: argocd-vault-plugin
       destination:
         server: https://kubernetes.default.svc
         namespace: lht-awx-{{.env}} 
