@@ -24,4 +24,7 @@ spec:
         path: manifest/{{.env}}
       destination:
         server: https://kubernetes.default.svc
-        namespace: lht-awx-{{.env}} 
+        namespace: lht-awx-{{.env}}
+      syncPolicy:
+        syncoptions:
+          - CreateNamespace=true
